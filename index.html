@@ -16,6 +16,7 @@
     var logo;
     var sprite;
     var cody;
+    var sticklogo;
     var buildings = {};
     var interfaces = {};
     var walking = false;
@@ -62,6 +63,10 @@
         for (var i = 0; i < 10; i++){
              this.load.image('crystal' + (i+1).toString(), 'assets/sprites/C/crystal' + (i+1).toString() + '.png');
         }
+
+        for (var i = 0; i < 9; i++){
+             this.load.image('sl' + i.toString(), 'assets/sprites/sticklogo/sl' + i.toString() + '.png');
+        }
     }
 
     function create ()
@@ -96,6 +101,28 @@
         invItems["C"] = this.add.sprite(1160, 455, 'crystal1');
         invItems["C"].setScale(0.5);
         invItems["C"].play('C');
+
+        this.anims.create({
+        key: 'sl',
+        frames: [
+            { key: 'sl0'},
+            { key: 'sl1'},
+            { key: 'sl2'},
+            { key: 'sl3'},
+            { key: 'sl4'},
+            { key: 'sl5'},
+            { key: 'sl6'},
+            { key: 'sl7'},
+            { key: 'sl8'},
+            { key: 'sl9'},
+        ],
+        frameRate: 8,
+        repeat: -1
+        });
+
+        sticklogo = this.add.sprite(500, 500, 'sl0');
+        sticklogo.setScale(0.5);
+        sticklogo.play('sl');
 
         // v3
 
