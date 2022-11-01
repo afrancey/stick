@@ -19,17 +19,22 @@
     var sticklogo;
     var buildings = {};
     var interfaces = {};
+    var portals = {};
     var walking = false;
     var flipped = false;
     var debug = true;
     var lastPressed = "null";
     var speed = 1;
 
+    var main_portal = {x:110, y:360, d:10};
+
     var invItems = {};
 
     var mouseX = 0;
     var mouseY = 0;
     var text;
+
+    var gameState = "main_menu";
 
     var config = {
         type: Phaser.AUTO,
@@ -67,12 +72,22 @@
         for (var i = 0; i < 9; i++){
              this.load.image('sl' + i.toString(), 'assets/sprites/sticklogo/sl' + i.toString() + '.png');
         }
+
+        for (var i = 0; i < 9; i++){
+             this.load.image('c' + i.toString(), 'assets/sprites/circle/c' + i.toString() + '.png');
+        }
+
+        //this.load.audio('theme', ['assets/audio/stick.mp3']);
     }
 
     function create ()
     {
-        this.camera = this.cameras.add(0, 0, 400, 300);
-        this.camera.setBackgroundColor('rgba(255, 255, 255, 0.5)');
+        this.w = this.cameras.main.width;
+        this.h = this.cameras.main.height;
+
+        this.black = new Phaser.Display.Color(0, 0, 0);
+        this.cameras.main.setBackgroundColor("FFFFFF");
+        
         buildings["bank"] = this.add.image(0,0, 'bank', '__BASE').setOrigin(0,0);
         buildings["bank"].setScale(0.5);
         interfaces["main"] = this.add.image(800,0, 'main', '__BASE').setOrigin(0,0);
@@ -120,7 +135,30 @@
         repeat: -1
         });
 
-        sticklogo = this.add.sprite(500, 500, 'sl0');
+        this.anims.create({
+        key: 'spin',
+        frames: [
+            { key: 'c0'},
+            { key: 'c1'},
+            { key: 'c2'},
+            { key: 'c3'},
+            { key: 'c4'},
+            { key: 'c5'},
+            { key: 'c6'},
+            { key: 'c7'},
+            { key: 'c8'},
+            { key: 'c9'},
+        ],
+        frameRate: 32,
+        repeat: -1
+        });
+        
+        portals["main_circle"] = this.add.sprite(main_portal.x, main_portal.y, 'c1');
+        portals["main_circle"].setScale(0.5);
+        portals["main_circle"].play('spin');
+
+        sticklogo = this.add.sprite(this.w/2, this.h/2, 'sl0');
+
         sticklogo.setScale(0.5);
         sticklogo.play('sl');
 
@@ -140,16 +178,42 @@
 
         text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
 
+        //var music = this.sound.add('theme');
+
+        //music.play();   
+
     }
 
     function update ()
     {
+        if ((Math.sqrt(Math.pow(cody.x - main_portal.x, 2) + Math.pow(cody.y - main_portal.y, 2))) < main_portal.d){
+            gameState = "lvl1";
+        }
+
+        if (gameState == "main_menu"){
+            buildings["bank"].visible = false;
+            interfaces["main"].visible = false;
+            invItems["C"].visible = false;
+            sticklogo.visible = true;
+            portals["main_circle"].visible = true;
+
+        } else {
+            sticklogo.visible = false;
+            buildings["bank"].visible = true;
+            interfaces["main"].visible = true;
+            invItems["C"].visible = true;
+
+        }
 
         var p = this.input.activePointer;
+        var other = (Math.sqrt(Math.pow(cody.x - main_portal.x, 2) + Math.pow(cody.y - main_portal.y, 2))).toString();
+        var other2 = ((Math.sqrt(Math.pow(cody.x - main_portal.x, 2) + Math.pow(cody.y - main_portal.y, 2))) < main_portal.d).toString();
+        var other3 = main_portal.d.toString();
 
-        text.setText(['x: ' + p.x,'y: ' + p.y,]);
+        text.setText(['x: ' + p.x,'y: ' + p.y,'me_x: ' + cody.x,'me_y: ' + cody.y,"gameState: " + gameState, "other: " + other, "other: " + other2, "other: " + other3]);
         
         var thisAnim = cody;
+
         var keyDown = false;
 
         if (cursors.left.isDown)
