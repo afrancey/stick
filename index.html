@@ -35,6 +35,8 @@
     var text;
 
     var gameState = "main_menu";
+    var music;
+    var musicPlaying = false;
 
     var config = {
         type: Phaser.AUTO,
@@ -77,7 +79,7 @@
              this.load.image('c' + i.toString(), 'assets/sprites/circle/c' + i.toString() + '.png');
         }
 
-        //this.load.audio('theme', ['assets/audio/stick.mp3']);
+        this.load.audio('theme', ['assets/audio/stick2.mp3', 'assets/audio/stick2.ogg']);
     }
 
     function create ()
@@ -178,9 +180,9 @@
 
         text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
 
-        //var music = this.sound.add('theme');
+        music = this.sound.add('theme');
 
-        //music.play();   
+        music.play();   
 
     }
 
@@ -248,6 +250,11 @@
         }
 
         if (keyDown){
+            if (!musicPlaying){
+                music.play();
+                musicPlaying = true;
+            }
+
             if (!walking){
                 thisAnim.play("walk"); 
                 walking = true;
