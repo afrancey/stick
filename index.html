@@ -22,7 +22,7 @@
     var portals = {};
     var walking = false;
     var flipped = false;
-    var debug = true;
+    var debug = false;
     var lastPressed = "null";
     var speed = 1;
 
@@ -35,7 +35,7 @@
     var text;
 
     var gameState = "main_menu";
-    var music;
+    var music = {};
     var musicPlaying = false;
 
     var config = {
@@ -80,6 +80,7 @@
         }
 
         this.load.audio('theme', ['assets/audio/stick2.mp3', 'assets/audio/stick2.ogg']);
+        this.load.audio('soft', ['assets/audio/sticksoft.mp3']);
     }
 
     function create ()
@@ -180,9 +181,10 @@
 
         text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
 
-        music = this.sound.add('theme');
+        music["theme"] = this.sound.add('theme');
+        music["soft"] = this.sound.add('soft');
 
-        music.play();   
+        //music.play(); // will start playback when user interacts with browser in any way
 
     }
 
@@ -190,6 +192,7 @@
     {
         if ((Math.sqrt(Math.pow(cody.x - main_portal.x, 2) + Math.pow(cody.y - main_portal.y, 2))) < main_portal.d){
             gameState = "lvl1";
+            musicPlaying = false;
         }
 
         if (gameState == "main_menu"){
@@ -212,8 +215,9 @@
         var other2 = ((Math.sqrt(Math.pow(cody.x - main_portal.x, 2) + Math.pow(cody.y - main_portal.y, 2))) < main_portal.d).toString();
         var other3 = main_portal.d.toString();
 
-        text.setText(['x: ' + p.x,'y: ' + p.y,'me_x: ' + cody.x,'me_y: ' + cody.y,"gameState: " + gameState, "other: " + other, "other: " + other2, "other: " + other3]);
-        
+        if (debug){
+            text.setText(['x: ' + p.x,'y: ' + p.y,'me_x: ' + cody.x,'me_y: ' + cody.y,"gameState: " + gameState, "other: " + other, "other: " + other2, "other: " + other3]);
+        }
         var thisAnim = cody;
 
         var keyDown = false;
@@ -251,8 +255,12 @@
 
         if (keyDown){
             if (!musicPlaying){
-                music.play();
+                music["theme"].play();
                 musicPlaying = true;
+                if (gameState == "lvl1"){
+                    music["theme"].stop();
+                    music["soft"].play();
+                }
             }
 
             if (!walking){
