@@ -51,7 +51,8 @@
     
         function preload ()
         {
-            this.load.setBaseURL("http://127.0.0.1:8080");
+            //this.load.setBaseURL("http://127.0.0.1:8080");
+            this.load.setBaseURL("http://192.168.0.69:8080");
     
             this.load.image("bank", '/../assets/buildings/bank.png');
             this.load.image("main", '/../assets/interfaces/interface_main2.png');
