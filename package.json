@@ -1,0 +1,24 @@
+{
+  "name": "stick",
+  "version": "1.0.0",
+  "description": "This is made with [Phaser 3](https://phaser.io/).",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afrancey/stick.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afrancey/stick/issues"
+  },
+  "homepage": "https://github.com/afrancey/stick#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
